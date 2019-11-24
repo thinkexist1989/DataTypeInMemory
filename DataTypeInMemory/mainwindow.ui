@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>477</width>
-    <height>344</height>
+    <width>1046</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Data Type In Memory</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_9">
+   <layout class="QGridLayout" name="gridLayout_9" columnstretch="1,3,3,3">
     <item row="3" column="1">
      <widget class="QGroupBox" name="groupBox_4">
       <property name="title">
@@ -22,50 +22,21 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
-        <widget class="QRadioButton" name="radioButton_5">
+        <widget class="QRadioButton" name="littleEndianRadioButton">
          <property name="text">
           <string>little</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QRadioButton" name="radioButton_6">
+        <widget class="QRadioButton" name="bigEndianRadioButton">
          <property name="text">
           <string>big</string>
          </property>
         </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="3">
-     <widget class="QGroupBox" name="groupBox_5">
-      <property name="title">
-       <string>Display</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="0">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>224</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="checkBox">
-         <property name="text">
-          <string>Show 0x marker</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QTableWidget" name="tableWidget"/>
        </item>
       </layout>
      </widget>
@@ -77,16 +48,19 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QRadioButton" name="radioButton_3">
+        <widget class="QRadioButton" name="x86RadioButton">
          <property name="text">
           <string>32 bit</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QRadioButton" name="radioButton_4">
+        <widget class="QRadioButton" name="x64RadioButton">
          <property name="text">
           <string>64 bit</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -100,14 +74,17 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="signedRadioButton">
          <property name="text">
           <string>signed</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="unsignedRadioButton">
          <property name="text">
           <string>unsigned</string>
          </property>
@@ -123,22 +100,36 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,2">
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="bytesInfoLineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>bit</string>
+          <string>Bits taken</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_2"/>
+        <widget class="QLineEdit" name="BitsInfoLineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>char</string>
+          <string>Bytes taken</string>
          </property>
         </widget>
        </item>
@@ -152,7 +143,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="0" column="2">
-        <widget class="QLineEdit" name="lineEdit_3"/>
+        <widget class="QLineEdit" name="valueInputLineEdit"/>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_3">
@@ -171,19 +162,174 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
-        <widget class="QTextBrowser" name="textBrowser"/>
+        <widget class="QTextBrowser" name="HexFormatTextBrowser"/>
        </item>
       </layout>
      </widget>
     </item>
-    <item row="0" column="0" rowspan="5">
+    <item row="1" column="0" rowspan="4">
      <widget class="QGroupBox" name="dataTypeBox">
       <property name="title">
        <string>Data Types</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QListWidget" name="dataTypeList">
+         <property name="currentRow">
+          <number>0</number>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>bool</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>char</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>short</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>int</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>long</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>float</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>double</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QGroupBox" name="groupBox_5">
+      <property name="title">
+       <string>Display</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_6">
        <item row="0" column="1">
-        <widget class="QListWidget" name="dataTypeList"/>
+        <widget class="QCheckBox" name="showMarkerCheckBox">
+         <property name="text">
+          <string>Show 0x marker</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>224</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QTableWidget" name="showMemTableWidget">
+         <attribute name="verticalHeaderStretchLastSection">
+          <bool>false</bool>
+         </attribute>
+         <row>
+          <property name="text">
+           <string>Data</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>Real Value</string>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="background">
+           <color>
+            <red>85</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr1</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr2</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr3</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr4</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr5</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr6</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr7</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Addr8</string>
+          </property>
+         </column>
+         <item row="0" column="0">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="background">
+           <brush brushstyle="NoBrush">
+            <color alpha="255">
+             <red>85</red>
+             <green>255</green>
+             <blue>255</blue>
+            </color>
+           </brush>
+          </property>
+         </item>
+        </widget>
        </item>
       </layout>
      </widget>
