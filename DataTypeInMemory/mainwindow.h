@@ -29,11 +29,16 @@ private:
     QButtonGroup*   archBtnGrp;
     QButtonGroup*   endianBtnGrp;
 
-    char* memArray;
+    unsigned char* memArray;
 
 
     void updateBytesAndBitsInfo(QString type);
-    void updateMemTableWidget(char* p, int lens);
+    void updateMemTableWidget(unsigned char *p, int lens);
+
+    template<typename T> void toLittleEndian(T src, unsigned char *dest);
+    template<typename T> void toBigEndian(T src, unsigned char *dest);
+
+    void memSwapCopy(unsigned char* Dst, const unsigned char* src, int lens);
 public slots:
     void informationUpdate(QString);
 private slots:

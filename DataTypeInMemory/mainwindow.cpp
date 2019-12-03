@@ -70,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         on_toMemPushButton_clicked();
     });
+    ui->x86RadioButton->setDisabled(true);
+
 
     //endian
     endianBtnGrp = new QButtonGroup(this);
@@ -91,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
         on_toMemPushButton_clicked();
     });
 
-    memArray = new char[8];
+    memArray = new unsigned char[8];
     on_toMemPushButton_clicked();
 
 }
@@ -124,14 +126,14 @@ void MainWindow::updateBytesAndBitsInfo(QString type)
     ui->bitsInfoLineEdit->setText(QString::number(bytes * 8));
 }
 
-void MainWindow::updateMemTableWidget(char *p, int lens)
+void MainWindow::updateMemTableWidget(unsigned char *p, int lens)
 {
     QString prefix;
     if(show0x)
         prefix = "0x";
 
     for(int i = 0; i < lens; i++){
-        ui->showMemTableWidget->setItem(0,i,new QTableWidgetItem(prefix + QString("%1").arg((int)(p[i]),2,16,QLatin1Char('0')).toUpper()));
+        ui->showMemTableWidget->setItem(0,i,new QTableWidgetItem(prefix + QString("%1").arg(p[i],2,16,QLatin1Char('0')).toUpper()));
     }
 }
 
@@ -151,20 +153,20 @@ void MainWindow::on_toMemPushButton_clicked()
     if(type == "char"){
         if(isSigned){ //signed
             char temp = static_cast<char>(stringValue.toInt());
-            memArray = &temp;
+            memArray = reinterpret_cast<unsigned char*>(&temp);
             updateMemTableWidget(memArray, sizeof(char));
 
         }
         else { //usigned
             unsigned char temp = static_cast<unsigned char>(stringValue.toInt());
-            memArray = reinterpret_cast<char*>(&temp);
+            memArray = &temp;
             updateMemTableWidget(memArray, sizeof(unsigned char));
         }
     }
     /********bool***********/
     else if(type == "bool"){
             bool temp = static_cast<bool>(stringValue.toInt());
-            memArray = reinterpret_cast<char*>(&temp);
+            memArray = reinterpret_cast<unsigned char*>(&temp);
             updateMemTableWidget(memArray, sizeof(bool));
     }
     /********short***********/
@@ -172,22 +174,22 @@ void MainWindow::on_toMemPushButton_clicked()
         if(isSigned){ //signed
             short temp = stringValue.toShort();
             if(isLittle){
-                qToLittleEndian(temp, memArray);
+                toLittleEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(short));
             }
             else {
-                qToBigEndian(temp, memArray);
+                toBigEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(short));
             }
         }
         else { //usigned
             unsigned short temp = stringValue.toUShort();
             if(isLittle){
-                qToLittleEndian(temp, memArray);
+                toLittleEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(unsigned short));
             }
             else {
-                qToBigEndian(temp, memArray);
+                toBigEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(unsigned short));
             }
         }
@@ -197,22 +199,22 @@ void MainWindow::on_toMemPushButton_clicked()
         if(isSigned){ //signed
             int temp = stringValue.toInt();
             if(isLittle){
-                qToLittleEndian(temp, memArray);
+                toLittleEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(int));
             }
             else {
-                qToBigEndian(temp, memArray);
+                toBigEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(int));
             }
         }
         else { //usigned
             unsigned int temp = stringValue.toUInt();
             if(isLittle){
-                qToLittleEndian(temp, memArray);
+                toLittleEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(unsigned int));
             }
             else {
-                qToBigEndian(temp, memArray);
+                toBigEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(unsigned int));
             }
         }
@@ -222,22 +224,22 @@ void MainWindow::on_toMemPushButton_clicked()
         if(isSigned){ //signed
             qint64 temp = stringValue.toLong();
             if(isLittle){
-                qToLittleEndian(temp, memArray);
+                toLittleEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(long));
             }
             else {
-                qToBigEndian(temp, memArray);
+                toBigEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(long));
             }
         }
         else { //usigned
-            quint64 temp = stringValue.toULong();
+            unsigned long temp = stringValue.toULong();
             if(isLittle){
-                qToLittleEndian(temp, memArray);
+                toLittleEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(unsigned long));
             }
             else {
-                qToBigEndian(temp, memArray);
+                toBigEndian(temp, memArray);
                 updateMemTableWidget(memArray, sizeof(unsigned long));
             }
         }
@@ -246,11 +248,11 @@ void MainWindow::on_toMemPushButton_clicked()
     else if(type == "float"){
         float temp = stringValue.toFloat();
         if(isLittle){
-            qToLittleEndian(temp, memArray);
+            toLittleEndian(temp, memArray);
             updateMemTableWidget(memArray, sizeof(float));
         }
         else {
-            qToBigEndian(temp, memArray);
+            toBigEndian(temp, memArray);
             updateMemTableWidget(memArray, sizeof(float));
         }
     }
@@ -258,11 +260,11 @@ void MainWindow::on_toMemPushButton_clicked()
     else if(type == "double"){
         double temp = stringValue.toDouble();
         if(isLittle){
-            qToLittleEndian<quint64>((quint64*)(&temp),1, memArray);
+            toLittleEndian(temp, memArray);
             updateMemTableWidget(memArray, sizeof(double));
         }
         else {
-            qToBigEndian(temp, memArray);
+            toBigEndian(temp, memArray);
             updateMemTableWidget(memArray, sizeof(double));
         }
     }
@@ -278,4 +280,31 @@ void MainWindow::on_showMarkerCheckBox_toggled(bool checked)
 {
     show0x = checked;
     on_toMemPushButton_clicked();
+}
+
+template<typename T>
+void MainWindow::toLittleEndian(T src, unsigned char *dest)
+{
+#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
+    memcpy(dest, reinterpret_cast<unsigned char*>(&src), sizeof(T));
+#else
+    memSwapCopy(dest, reinterpret_cast<unsigned char*>(&src), sizeof(T));
+#endif
+}
+
+template<typename T>
+void MainWindow::toBigEndian(T src, unsigned char *dest)
+{
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
+    memcpy(dest, reinterpret_cast<unsigned char*>(&src), sizeof(T));
+#else
+    memSwapCopy(dest, reinterpret_cast<unsigned char*>(&src), sizeof(T));
+#endif
+}
+
+void MainWindow::memSwapCopy(unsigned char *Dst, const unsigned char *src, int lens)
+{
+    for(int i = 0; i < lens; i++){
+        memcpy(&(Dst[i]), &(src[lens - 1 - i]), 1);
+    }
 }
