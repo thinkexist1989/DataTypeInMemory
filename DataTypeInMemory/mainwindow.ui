@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1046</width>
-    <height>399</height>
+    <height>404</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,7 +99,7 @@
        <string>Information</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2" columnstretch="3,2">
-       <item row="0" column="1">
+       <item row="1" column="1">
         <widget class="QLineEdit" name="bytesInfoLineEdit">
          <property name="enabled">
           <bool>false</bool>
@@ -109,15 +109,22 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Bytes taken</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Bits taken</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="BitsInfoLineEdit">
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="bitsInfoLineEdit">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -127,9 +134,16 @@
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Bytes taken</string>
+          <string>Host endian-ness</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="hostEndianLineEdit">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -142,13 +156,24 @@
        <string>Input</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="valueInputLineEdit"/>
-       </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Value:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLineEdit" name="valueInputLineEdit">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="toMemPushButton">
+         <property name="text">
+          <string>Calc</string>
          </property>
         </widget>
        </item>
@@ -163,6 +188,13 @@
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
         <widget class="QTextBrowser" name="HexFormatTextBrowser"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="toValuePushButton">
+         <property name="text">
+          <string>Calc</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -193,7 +225,12 @@
          </item>
          <item>
           <property name="text">
-           <string>short</string>
+           <string>double</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>float</string>
           </property>
          </item>
          <item>
@@ -208,12 +245,7 @@
          </item>
          <item>
           <property name="text">
-           <string>float</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>double</string>
+           <string>short</string>
           </property>
          </item>
         </widget>
@@ -259,24 +291,6 @@
          </row>
          <column>
           <property name="text">
-           <string>Real Value</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="background">
-           <color>
-            <red>85</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-          </property>
-         </column>
-         <column>
-          <property name="text">
            <string>Addr1</string>
           </property>
          </column>
@@ -315,20 +329,6 @@
            <string>Addr8</string>
           </property>
          </column>
-         <item row="0" column="0">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="background">
-           <brush brushstyle="NoBrush">
-            <color alpha="255">
-             <red>85</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </property>
-         </item>
         </widget>
        </item>
       </layout>
